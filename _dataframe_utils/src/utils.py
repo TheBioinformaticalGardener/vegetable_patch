@@ -1,4 +1,5 @@
-""" """
+""" 
+"""
 
 from pathlib import Path
 import json
@@ -142,3 +143,34 @@ def store_dtypes_as_json(
 
     if print_success:
         print(f"File '{file_name}' saved to path '{str(path.resolve())}'.")
+
+
+
+def set_column_order(df:pd.DataFrame, column_to_move:str, after_column:str) -> pd.DataFrame:
+    """
+    Reorder the columns in a data frame to have a specified column after another specified column.
+
+    Args:
+        df (pd.DataFrame): Data frame to reorder columns in.
+        column_to_move (str): The name of the column to move.
+        after_column (str): The name of the column to insert the moved column after.
+
+    Raises:
+        ValueError: If specified column to move is not in the data frame.
+        ValueError: If specified column to insert column after is not in the data frame.
+
+    Returns:
+        pd.DataFrame: Original data frame with the columns in the new order.
+    """
+    
+    if column_to_move not in df.columns:
+        raise ValueError(f"Column '{column_to_move}' not in DataFrame.")
+    if after_column not in df.columns:
+        raise ValueError(f"Column '{after_column}' not in DataFrame.")
+
+    columns = list(df.columns)
+    columns.remove(column_to_move)
+    after_column_index = columns.index(after_column)
+    columns.insert(after_column_index + 1, column_to_move)
+    
+    return df[columns]
