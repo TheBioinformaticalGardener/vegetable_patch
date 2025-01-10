@@ -174,3 +174,24 @@ def set_column_order(df:pd.DataFrame, column_to_move:str, after_column:str) -> p
     columns.insert(after_column_index + 1, column_to_move)
     
     return df[columns]
+
+
+
+def extract_sheets_from_Excel(read_path:Path, path_storage_dir:Path, file_name_prefix:str='', file_name_suffix:str='') -> None:
+    """Extracts all sheets from an Excel file and saves them as CSVs."""
+
+    # Read all sheets in Excel file:
+    with pd.ExcelFile(read_path) as xl_file:
+        xl_sheets = {
+            sheet : pd.read_excel(xl_file, sheet_name=sheet)
+            for sheet in xl_file.sheet_names
+        }
+
+    # Iterate the dict and store dfs in sheets to respective CSV files:
+    for sheet, df in xl_sheets.items():
+        file_name = f'{file_name_prefix}{sheet}{file_name_suffix}.csv'
+        df.to_csv(
+            path_storage_dir / file_name,
+            index=False
+        )
+    
