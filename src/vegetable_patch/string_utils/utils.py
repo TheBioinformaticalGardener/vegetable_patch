@@ -2,8 +2,17 @@ import re
 from typing import Optional, Iterable
 
 
+def replace_case_insensitive(input_string:str, search_pattern:str, replacement:str) -> str:
+    """
+    Replace substring in a case insensitive matter.  
+    """
+    pattern = re.compile(search_pattern, re.IGNORECASE)
+    output_string = pattern.sub(replacement, input_string) 
+    return output_string
 
-def dayfirst_to_international_format_date(text) -> str:
+
+
+def dayfirst_to_international_format_date(text:str) -> str:
     """
     Uses RegEx to convert a string representation of a date on the format dd.mm.yyyy to yyyy-mm-dd
     """
